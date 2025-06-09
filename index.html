@@ -2,49 +2,108 @@
 <html lang="hu">
 <head>
   <meta charset="UTF-8">
-  <title>Webes Számológép</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Számológép</title>
   <style>
-    body { font-family: Arial; text-align: center; margin-top: 50px; }
-    #display { width: 220px; height: 40px; font-size: 24px; margin-bottom: 10px; text-align: right; }
-    .button { width: 50px; height: 50px; font-size: 18px; margin: 2px; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    #calculator {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      max-width: 300px;
+      width: 100%;
+    }
+
+    #display {
+      grid-column: span 4;
+      height: 50px;
+      font-size: 24px;
+      text-align: right;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      background: #222;
+      color: white;
+    }
+
+    button {
+      padding: 20px;
+      font-size: 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #333;
+      color: white;
+      transition: background 0.2s;
+    }
+
+    button.operator { background-color: #ff9500; }
+    button.equal    { background-color: #28a745; }
+    button.clear    { background-color: #dc3545; }
+
+    button:active {
+      opacity: 0.85;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 <body>
   <h1>Számológép</h1>
-  <input id="display" disabled><br>
-  <div id="buttons"></div>
+  <div id="calculator">
+    <input type="text" id="display" disabled>
+    <button class="clear" onclick="clearDisplay()">C</button>
+    <button class="operator" onclick="append('/')">÷</button>
+    <button class="operator" onclick="append('*')">×</button>
+    <button class="operator" onclick="append('-')">−</button>
+
+    <button onclick="append('7')">7</button>
+    <button onclick="append('8')">8</button>
+    <button onclick="append('9')">9</button>
+    <button class="operator" onclick="append('+')">+</button>
+
+    <button onclick="append('4')">4</button>
+    <button onclick="append('5')">5</button>
+    <button onclick="append('6')">6</button>
+    <button class="equal" onclick="calculate()">=</button>
+
+    <button onclick="append('1')">1</button>
+    <button onclick="append('2')">2</button>
+    <button onclick="append('3')">3</button>
+    <button onclick="append('.')">.</button>
+
+    <button style="grid-column: span 2" onclick="append('0')">0</button>
+  </div>
 
   <script>
     const display = document.getElementById("display");
-    const buttons = [
-      '7','8','9','/',
-      '4','5','6','*',
-      '1','2','3','-',
-      '0','.','=','+',
-      'C'
-    ];
 
-    const container = document.getElementById("buttons");
+    function append(char) {
+      display.value += char;
+    }
 
-    buttons.forEach(char => {
-      const btn = document.createElement("button");
-      btn.innerText = char;
-      btn.className = "button";
-      btn.onclick = () => {
-        if (char === '=') {
-          try {
-            display.value = eval(display.value);
-          } catch {
-            display.value = "HIBA";
-          }
-        } else if (char === 'C') {
-          display.value = '';
-        } else {
-          display.value += char;
-        }
-      };
-      container.appendChild(btn);
-    });
+    function clearDisplay() {
+      display.value = '';
+    }
+
+    function calculate() {
+      try {
+        display.value = eval(display.value);
+      } catch {
+        display.value = 'HIBA';
+      }
+    }
   </script>
 </body>
 </html>
